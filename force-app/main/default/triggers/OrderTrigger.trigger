@@ -1,3 +1,3 @@
-trigger OrderTrigger on Order (after insert, after update) {
-    OrderService.validateOrders(Trigger.new);
+trigger OrderTrigger on Order (before insert, before update) {
+    OrderTriggerHandler.run(); 
 }
