@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DeliveredStatusRequiresActualDate</fullName>
+    <active>true</active>
+    <description>When delivery is marked as Delivered, the actual delivery date must be filled in</description>
+    <errorConditionFormula>AND(
+        ISPICKVAL(Status__c, &apos;Delivered&apos;),
+        ISBLANK(ActualDate__c)
+    )</errorConditionFormula>
+    <errorDisplayField>ActualDate__c</errorDisplayField>
+    <errorMessage>When the status is set to &quot;Delivered&quot;, you must specify the Actual Delivery Date.</errorMessage>
+</ValidationRule>
