@@ -1,0 +1,85 @@
+<template>
+    <lightning-card title="🚚 Lancer la livraison" icon-name="standard:shipment">
+        
+        <!-- Loading state -->
+        <template lwc:if={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Chargement..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error state -->
+        <template lwc:if={errorMessage}>
+            <div class="slds-p-around_medium">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">erreur</span>
+                    <h2>{errorMessage}</h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Main content -->
+        <template lwc:if={hasOptions}>
+            <div class="slds-p-around_medium">
+
+                <!-- Le plus rapide -->
+                <div class="slds-box slds-box_x-small slds-m-bottom_medium slds-theme_shade">
+                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">
+                        ⚡ Le plus rapide
+                    </h3>
+                    <p>
+                        <strong>{fastest.Transporter__r.Name}</strong>
+                        — {fastest.DeliveryTime__c} jour(s) — {fastest.Price__c} €
+                    </p>
+                    <lightning-button
+                        label="Sélectionner cette option"
+                        variant="brand-outline"
+                        onclick={selectFastest}
+                        class="slds-m-top_x-small">
+                    </lightning-button>
+                </div>
+
+                <!-- Le moins cher -->
+                <div class="slds-box slds-box_x-small slds-m-bottom_medium slds-theme_shade">
+                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">
+                        💰 Le moins cher
+                    </h3>
+                    <p>
+                        <strong>{cheapest.Transporter__r.Name}</strong>
+                        — {cheapest.DeliveryTime__c} jour(s) — {cheapest.Price__c} €
+                    </p>
+                    <lightning-button
+                        label="Sélectionner cette option"
+                        variant="brand-outline"
+                        onclick={selectCheapest}
+                        class="slds-m-top_x-small">
+                    </lightning-button>
+                </div>
+
+                <!-- Choix manuel -->
+                <div class="slds-m-top_medium">
+                    <lightning-combobox
+                        name="transporter"
+                        label="📋 Choisir un autre transporteur"
+                        value={selectedFeeId}
+                        placeholder="-- Sélectionner --"
+                        options={comboboxOptions}
+                        onchange={handleTransporterChange}>
+                    </lightning-combobox>
+                </div>
+
+                <!-- Action principale -->
+                <div class="slds-m-top_large slds-align_absolute-center">
+                    <lightning-button
+                        label="🚀 Lancer la livraison"
+                        variant="brand"
+                        disabled={isLaunchDisabled}
+                        onclick={handleLaunchDelivery}>
+                    </lightning-button>
+                </div>
+
+            </div>
+        </template>
+
+    </lightning-card>
+</template>

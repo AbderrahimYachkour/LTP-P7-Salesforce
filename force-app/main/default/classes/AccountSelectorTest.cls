@@ -1,12 +1,4 @@
-/**
- * @description Classe de test pour AccountSelector.
- *              Teste chacune des méthodes publiques avec différents scénarios :
- *              - cas nominal (données présentes)
- *              - cas limite (set vide)
- *              - cas d'erreur (Id inexistant)
- * @author      Abderrahim Yachkour
- * @date        29/04/2026
- */
+
 @isTest
 private class AccountSelectorTest {
 
