@@ -1,9 +1,6 @@
 @isTest
 private class LaunchDeliveryControllerTest {
 
-    /**
-     * @description Crée un transporteur + un tarif pour la France + Individual.
-     */
     @TestSetup
     static void setupData() {
         Transporter__c t = new Transporter__c(
@@ -21,12 +18,8 @@ private class LaunchDeliveryControllerTest {
         insert fee;
     }
 
-    /**
-     * @description Cas nominal : récupère les options pour une Order valide.
-     */
     @isTest
     static void testGetDeliveryOptions_validOrder_returnsWrapper() {
-        // ARRANGE
         Account a = new Account(Name = 'Test', Type = 'Individual');
         insert a;
 
@@ -39,25 +32,18 @@ private class LaunchDeliveryControllerTest {
         );
         insert o;
 
-        // ACT
         Test.startTest();
-        LaunchDeliveryController.DeliveryOptionsWrapper result =
-            LaunchDeliveryController.getDeliveryOptions(o.Id);
+        LaunchDeliveryController.DeliveryOptions result = LaunchDeliveryController.getDeliveryOptions(o.Id);
         Test.stopTest();
 
-        // ASSERT
-        System.assertNotEquals(null, result, 'Le wrapper ne doit pas être null');
-        System.assertNotEquals(null, result.cheapest, 'cheapest doit être renseigné');
-        System.assertNotEquals(null, result.fastest, 'fastest doit être renseigné');
+        System.assertNotEquals(null, result, 'Le wrapper ne doit pas etre null');
+        System.assertNotEquals(null, result.cheapest, 'cheapest doit etre renseigne');
+        System.assertNotEquals(null, result.fastest, 'fastest doit etre renseigne');
         System.assert(!result.allOptions.isEmpty(), 'allOptions doit contenir au moins 1 tarif');
     }
 
-    /**
-     * @description Cas d'erreur : Order sans pays de livraison → exception.
-     */
     @isTest
     static void testGetDeliveryOptions_noShippingCountry_throwsException() {
-        // ARRANGE
         Account a = new Account(Name = 'Test', Type = 'Individual');
         insert a;
 
@@ -69,7 +55,6 @@ private class LaunchDeliveryControllerTest {
         );
         insert o;
 
-        // ACT + ASSERT
         Boolean exceptionThrown = false;
         Test.startTest();
         try {
@@ -79,15 +64,11 @@ private class LaunchDeliveryControllerTest {
         }
         Test.stopTest();
 
-        System.assert(exceptionThrown, 'Une exception doit être levée si pas de ShippingCountry');
+        System.assert(exceptionThrown, 'Une exception doit etre levee si pas de ShippingCountry');
     }
 
-    /**
-     * @description Cas nominal : crée bien une Delivery liée à l'Order.
-     */
     @isTest
     static void testLaunchDelivery_validInputs_createsDelivery() {
-        // ARRANGE
         Account a = new Account(Name = 'Test', Type = 'Individual');
         insert a;
 
@@ -102,24 +83,18 @@ private class LaunchDeliveryControllerTest {
 
         Transporter__c t = [SELECT Id FROM Transporter__c WHERE Name = 'TestCarrier' LIMIT 1];
 
-        // ACT
         Test.startTest();
         Id deliveryId = LaunchDeliveryController.launchDelivery(o.Id, t.Id, 2);
         Test.stopTest();
 
-        // ASSERT
-        System.assertNotEquals(null, deliveryId, 'L\'Id de la Delivery doit être retourné');
+        System.assertNotEquals(null, deliveryId, 'L\'Id de la Delivery doit etre retourne');
 
-        Delivery__c created = [SELECT Id, Order__c, Transporter__c, Status__c
-                                FROM Delivery__c WHERE Id = :deliveryId];
-        System.assertEquals(o.Id, created.Order__c, 'La Delivery doit être liée à l\'Order');
+        Delivery__c created = [SELECT Id, Order__c, Transporter__c, Status__c FROM Delivery__c WHERE Id = :deliveryId];
+        System.assertEquals(o.Id, created.Order__c, 'La Delivery doit etre liee a l\'Order');
         System.assertEquals(t.Id, created.Transporter__c, 'La Delivery doit pointer vers le Transporter');
-        System.assertEquals('New', created.Status__c, 'Status par défaut = New');
+        System.assertEquals('New', created.Status__c, 'Status par defaut = New');
     }
 
-    /**
-     * @description Cas d'erreur : params null → exception levée proprement.
-     */
     @isTest
     static void testLaunchDelivery_nullInputs_throwsException() {
         Boolean exceptionThrown = false;
@@ -131,6 +106,6 @@ private class LaunchDeliveryControllerTest {
         }
         Test.stopTest();
 
-        System.assert(exceptionThrown, 'Doit lever une exception si paramètres null');
+        System.assert(exceptionThrown, 'Doit lever une exception si parametres null');
     }
 }
